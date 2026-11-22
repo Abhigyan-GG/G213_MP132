@@ -1,0 +1,8 @@
+raw_dir: data/raw
+experiment: G213-MP132-electricity
+registered_model: G213-Patna-Household-kWh
+validation_fraction: 0.2
+later_fit_fraction: 0.7
+promotion_improvement: 0.15
+recent_weight: 20
+ridge_alphas: [0.1, 1.0, 10.0]

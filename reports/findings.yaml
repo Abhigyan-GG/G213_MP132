@@ -1,62 +1,53 @@
-# MP132 findings --- fill in every value, keep every key.
-# The marking tool reads this file. Write null only where the comment says so.
-# Use the exact column names and group values from your data files.
-
-group_id: "G213"          # your group id, e.g. "G042"
-problem_id: "MP132"
-
+group_id: G213
+problem_id: MP132
 data_issues:
-  # For each of the 7 kinds: present: true or false.
-  # If present is false, leave the other values as null.
   leaking_column:
-    present: null
-    column: null           # the column that must not be used as a feature
+    present: false
+    column: null
   unit_mixup:
-    present: null
-    column: null           # the column recorded in a different unit
-    group_value: null      # the value of feeder whose rows are affected
-    factor: null           # wrong value = right value x factor
+    present: true
+    column: ac_hours_per_day
+    group_value: Feeder-2
+    factor: 60
   sentinel_value:
-    present: null
-    column: null
-    value: null            # the special number typed instead of a blank
-    count: null            # how many rows have it
+    present: true
+    column: members
+    value: -1
+    count: 33
   duplicate_rows:
-    present: null
-    count: null            # number of EXTRA copies (rows you would delete)
+    present: true
+    count: 42
   stuck_sensor:
-    present: null
-    column: null
-    start_date: null       # first date with the stuck value, YYYY-MM-DD
-    end_date: null         # last date with the stuck value, YYYY-MM-DD
+    present: true
+    column: rooms
+    start_date: '2026-05-11'
+    end_date: '2026-05-29'
   target_typos:
-    present: null
-    count: null            # rows whose target was typed 10 times too big
+    present: false
+    count: null
   spelling_variants:
-    present: null
-    column: null
-    true_levels: null      # how many real categories there are after cleaning
-
+    present: true
+    column: connection
+    true_levels: 3
 tracking:
-  experiment_name: null
-  best_run_id: null        # the MLflow run id of your v1 model
-  registered_model_name: null
-  champion_version: null
-
+  experiment_name: G213-MP132-electricity
+  best_run_id: 4caf35cdebec4ab992e6b9d0cb7d870b
+  registered_model_name: G213-Patna-Household-kWh
+  champion_version: 2
 monitoring:
-  psi:                     # cleaned train.csv vs later.csv, 10 bins
-    rooms: null
-    members: null
-    ac_hours_per_day: null
-    avg_temp_c: null
-    house_area_sqft: null
-    solar_kw: null
-  most_drifted_feature: null
-  mae_by_group:            # v1 on later.csv, per value of feeder
-    'Feeder-1': null
-    'Feeder-2': null
-    'Feeder-3': null
-  worst_served_group: null
-  mae_v1_on_check: null    # v1 on the last 30% of later.csv (by date)
-  mae_v2_on_check: null    # v2 on the same rows
-  decision: null           # promote or keep
+  psi:
+    rooms: 0.08237635482208365
+    members: 0.03552055664640781
+    ac_hours_per_day: 0.028163836992125362
+    avg_temp_c: 5.3767504273738345
+    house_area_sqft: 0.04581571235744927
+    solar_kw: 0.04454958437827715
+  most_drifted_feature: avg_temp_c
+  mae_by_group:
+    Feeder-1: 33.28098592616626
+    Feeder-2: 43.76677322798972
+    Feeder-3: 241.23918074282335
+  worst_served_group: Feeder-3
+  mae_v1_on_check: 155.4614721921127
+  mae_v2_on_check: 31.839569132331274
+  decision: promote
