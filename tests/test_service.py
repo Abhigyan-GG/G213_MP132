@@ -1,9 +1,11 @@
+from io import StringIO
+import json
 import math
 
 from fastapi.testclient import TestClient
 import pytest
 
-from app.main import app
+from app.main import app, handler
 
 client = TestClient(app)
 household = {
@@ -33,3 +35,13 @@ def test_reject_bad_inputs(changes):
 
 def test_missing_input():
     assert client.post("/predict", json={k: v for k, v in household.items() if k != "rooms"}).status_code == 422
+
+
+def test_prediction_emits_one_json_event(monkeypatch):
+    stream = StringIO()
+    monkeypatch.setattr(handler, "stream", stream)
+    assert client.post("/predict", json=household).status_code == 200
+    assert client.post("/predict", json={**household, "avg_temp_c": 67}).status_code == 422
+    lines = stream.getvalue().splitlines()
+    assert len(lines) == 1
+    assert json.loads(lines[0]) == {"event": "prediction", "level": "INFO"}
