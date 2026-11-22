@@ -1,0 +1,3 @@
+# Keep the supplied household data out of public commits.
+/data/*.csv
+/data/raw/*.csv
